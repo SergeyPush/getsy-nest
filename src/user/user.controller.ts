@@ -26,7 +26,7 @@ export class UserController {
   }
 
   @Post()
-  async createUser(@Body() createUser: CreateUserDto) {
+  async createUser(@Body() createUser: Omit<CreateUserDto, 'id'>) {
     return this.userService.createUser(createUser);
   }
 

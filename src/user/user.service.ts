@@ -40,9 +40,10 @@ export class UserService {
   async getAllUsers() {
     return this.users;
   }
-  async createUser(createUserDto: CreateUserDto) {
-    this.users.push(createUserDto);
-    return createUserDto;
+  async createUser(createUserDto: Omit<CreateUserDto, 'id'>) {
+    const user = { ...createUserDto, id: Date.now().toString() };
+    this.users.push(user);
+    return user;
   }
   async deleteUserById(id: string) {
     const candidate = await this.getUserById(id);
@@ -51,5 +52,13 @@ export class UserService {
   async updateUserById(id: string, updateUserDto: Partial<CreateUserDto>) {
     const user = await this.getUserById(id);
     return { ...user, ...updateUserDto };
+  }
+
+  async findUserByEmail(email: string): Promise<CreateUserDto> {
+    const user = this.users.find((user) => user.email === email);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
   }
 }

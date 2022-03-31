@@ -9,9 +9,8 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto {
-  @IsOptional()
-  @IsNumberString()
-  id?: string;
+  @IsString()
+  id: string;
   @IsNotEmpty({ message: 'firstName must be a string' })
   @IsString()
   firstName: string;
@@ -27,4 +26,6 @@ export class CreateUserDto {
   password: string;
   @IsOptional()
   avatar?: string;
+  @IsOptional()
+  username?: string;
 }
