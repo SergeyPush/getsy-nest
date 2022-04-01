@@ -33,7 +33,12 @@ export class AuthService {
     const { password, ...rest } = createUserDto;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    return this.userService.createUser({ ...rest, password: hashedPassword });
+    const user = await this.userService.createUser({
+      ...rest,
+      password: hashedPassword,
+    });
+
+    return { ...rest, ...this.createToken(user) };
   }
 
   private createToken(user: CreateUserDto) {
