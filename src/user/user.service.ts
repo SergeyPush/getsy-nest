@@ -55,10 +55,6 @@ export class UserService {
   }
 
   async findUserByEmail(email: string): Promise<CreateUserDto> {
-    const user = this.users.find((user) => user.email === email);
-    if (!user) {
-      throw new NotFoundException();
-    }
-    return user;
+    return this.users.find((user) => user.email === email);
   }
 }

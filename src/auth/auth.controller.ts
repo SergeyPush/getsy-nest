@@ -4,6 +4,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './get-user.decorator';
+import { JwtInterface } from './types/jwt.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +22,7 @@ export class AuthController {
 
   @Get('/test')
   @UseGuards(AuthGuard())
-  async test(@GetUser() user: any) {
-    console.log(user.username);
+  async test(@GetUser() user: JwtInterface) {
+    return user;
   }
 }

@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from '../../user/user.service';
 import { ConfigService } from '@nestjs/config';
+import { JwtInterface } from '../types/jwt.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -14,12 +15,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any) {
+  async validate(payload: JwtInterface) {
     const { id, email } = payload;
     const user = await this.userService.findUserByEmail(email);
     if (!user) {
-      throw new NotFoundException('No such user');
+      throw new UnauthorizedException('No access');
     }
-    return { userId: id, username: email };
+    return { id, username: user.email };
   }
 }
