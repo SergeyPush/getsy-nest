@@ -1,0 +1,10 @@
+{
+  "package": "./package.json",
+  "recursive": true,
+  "spec": ["dist/test/**/*.spec.js"],
+  "watch-files": ["dist/test/**/*.js"],
+  "timeout": 5000,
+  "slow": 100,
+  "extension": ["js", "ts"],
+  "retries": 2
+}

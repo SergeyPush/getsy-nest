@@ -16,7 +16,7 @@ export class AuthController {
   }
 
   @Post('/signup')
-  async signUp(@Body() createUserDto: Omit<CreateUserDto, 'id'>) {
+  async signUp(@Body() createUserDto: CreateUserDto) {
     return this.authService.signUp(createUserDto);
   }
 

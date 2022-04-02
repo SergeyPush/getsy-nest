@@ -9,20 +9,19 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto {
+  @IsOptional()
   @IsString()
-  id: string;
+  id?: string;
   @IsNotEmpty({ message: 'firstName must be a string' })
   @IsString()
   firstName: string;
   @IsNotEmpty({ message: 'lastName must be a string' })
   @IsString()
   lastName: string;
-  @IsNotEmpty()
   @IsEmail()
   email: string;
   @IsNotEmpty()
   @IsString()
-  @Length(3)
   password: string;
   @IsOptional()
   avatar?: string;
