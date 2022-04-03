@@ -38,7 +38,8 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    return { ...rest, ...this.createToken(user) };
+    delete user.password;
+    return { ...user, ...this.createToken(user) };
   }
 
   private createToken(user: CreateUserDto) {

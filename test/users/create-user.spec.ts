@@ -1,16 +1,12 @@
 import * as supertest from 'supertest';
 import { expect } from 'chai';
+import { getRandomUser } from './utils/users.utils';
 
 const request = supertest('http://localhost:4000/api');
 
-describe('Create user', () => {
-  it('should POST /users', async () => {
-    const payload = {
-      firstName: 'Andy',
-      lastName: 'Garcia',
-      email: 'andy@mail.com',
-      password: '123456',
-    };
+describe('Sign Up user', () => {
+  const payload = getRandomUser();
+  it('should POST /auth/signup', async () => {
     const res = await request.post('/auth/signup').send(payload).expect(201);
     expect(res.body).to.have.property('firstName').be.eq(payload.firstName);
     expect(res.body).to.have.property('lastName').be.eq(payload.lastName);
