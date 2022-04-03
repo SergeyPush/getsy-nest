@@ -6,9 +6,9 @@ const request = supertest('http://localhost:4000/api');
 describe('Create user', () => {
   it('should POST /users', async () => {
     const payload = {
-      firstName: 'Ginger',
-      lastName: 'Folks',
-      email: 'gingerfolks@mail.com',
+      firstName: 'Andy',
+      lastName: 'Garcia',
+      email: 'andy@mail.com',
       password: '123456',
     };
     const res = await request.post('/auth/signup').send(payload).expect(201);
