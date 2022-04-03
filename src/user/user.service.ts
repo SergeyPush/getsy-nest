@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 
-import { DbService } from '../prisma/db.service';
+import { UserDbService } from '../prisma/user-db.service';
 
 @Injectable()
 export class UserService {
-  constructor(private dbService: DbService) {}
+  constructor(private dbService: UserDbService) {}
 
   async getUserById(id: number) {
     return this.dbService.getUserById(id);
