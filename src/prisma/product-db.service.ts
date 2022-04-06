@@ -37,7 +37,7 @@ export class ProductDbService {
 
   async deleteProduct(id: number) {
     const product = await this.getProductById(id);
-    this.prismaService.product.delete({
+    await this.prismaService.product.delete({
       where: {
         id: product.id,
       },

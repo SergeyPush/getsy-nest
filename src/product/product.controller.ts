@@ -29,7 +29,7 @@ export class ProductController {
   getProductById(@Param('id') id: number) {
     return this.productService.getProductById(id);
   }
-  @Delete('id')
+  @Delete('/:id')
   deleteProductById(@Param('id') id: number) {
     return this.productService.deleteProductById(id);
   }
