@@ -1,6 +1,6 @@
 import * as supertest from 'supertest';
 import { expect } from 'chai';
-import { getRandomUser } from './utils/users.utils';
+import { getRandomUser } from '../utils/users.utils';
 
 const request = supertest('http://localhost:4000/api');
 
