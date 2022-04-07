@@ -11,7 +11,7 @@ describe('Get all users', () => {
 });
 
 describe('Get single user', () => {
-  it('should return single user', async () => {
+  it.skip('should return single user', async () => {
     const user = await request.get('/users/1').expect(200);
     expect(user.body).to.not.be.empty;
   });

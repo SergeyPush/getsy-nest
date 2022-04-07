@@ -1,25 +1,20 @@
 import * as supertest from 'supertest';
 import { expect } from 'chai';
+import { getRandomUser } from '../utils/users.utils';
 
 const request = supertest('http://localhost:4000/api');
 
 describe('Success login tests', () => {
+  const payload = getRandomUser();
   it('should create test user', async () => {
-    const payload = {
-      firstName: 'Ginger',
-      lastName: 'Folks',
-      email: 'gingerfolks@mail.com',
-      password: '123456',
-    };
     await request.post('/auth/signup').send(payload).expect(201);
   });
 
   it('should login user', async () => {
-    const payload = {
-      email: 'gingerfolks@mail.com',
-      password: '123456',
-    };
-    const res = await request.post('/auth/login').send(payload).expect(201);
+    const res = await request
+      .post('/auth/login')
+      .send({ email: payload.email, password: payload.password })
+      .expect(201);
     expect(res.body.accessToken).to.be.a('string');
   });
 

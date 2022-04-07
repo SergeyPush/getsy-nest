@@ -11,7 +11,7 @@ import {
 export class CreateUserDto {
   @IsOptional()
   @IsString()
-  id?: string;
+  id?: number;
   @IsNotEmpty({ message: 'firstName must be a string' })
   @IsString()
   firstName: string;

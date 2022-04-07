@@ -1,60 +1,34 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+
+import { UserDbService } from '../prisma/user-db.service';
 
 @Injectable()
 export class UserService {
-  users: CreateUserDto[];
-  constructor() {
-    this.users = [
-      {
-        id: '1',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'johndoe@mail.com',
-        password: '123456',
-      },
-      {
-        id: '2',
-        firstName: 'Adam',
-        lastName: 'Smith',
-        email: 'smithadam@mail.com',
-        password: '123456',
-      },
-      {
-        id: '3',
-        firstName: 'Jane',
-        lastName: 'Doe',
-        email: 'janedoe@mail.com',
-        password: '123456',
-      },
-    ];
+  constructor(private dbService: UserDbService) {}
+
+  async getUserById(id: number) {
+    return this.dbService.getUserById(id);
   }
 
-  async getUserById(id: string) {
-    const user = this.users.find((user) => user.id === id);
-    if (!user) {
-      throw new NotFoundException();
-    }
-    return user;
-  }
   async getAllUsers() {
-    return this.users;
+    return this.dbService.getAllUsers();
   }
+
   async createUser(createUserDto: Omit<CreateUserDto, 'id'>) {
-    const user = { ...createUserDto, id: Date.now().toString() };
-    this.users.push(user);
-    return user;
+    return this.dbService.createUser(createUserDto);
   }
-  async deleteUserById(id: string) {
-    const candidate = await this.getUserById(id);
-    return this.users.filter((user) => user.id !== candidate.id);
+
+  async deleteUserById(id: number) {
+    await this.dbService.deleteUserById(id);
+    return { status: 'User deleted' };
   }
-  async updateUserById(id: string, updateUserDto: Partial<CreateUserDto>) {
-    const user = await this.getUserById(id);
-    return { ...user, ...updateUserDto };
+
+  async updateUserById(id: number, updateUserDto: Partial<CreateUserDto>) {
+    return this.dbService.updateUserById(id, updateUserDto);
   }
 
   async findUserByEmail(email: string): Promise<CreateUserDto> {
-    return this.users.find((user) => user.email === email);
+    return this.dbService.getUserByEmail(email);
   }
 }
