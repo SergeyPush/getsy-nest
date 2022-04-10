@@ -24,7 +24,12 @@ export class AuthService {
     }
     const isValid = await bcrypt.compare(password, user.password);
     if (isValid) {
-      return this.createToken(user);
+      return {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        ...this.createToken(user),
+      };
     }
     throw new UnauthorizedException('Invalid credentials');
   }

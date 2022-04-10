@@ -27,6 +27,5 @@ export class CreateProductDto {
   @IsEnum(ProductTypeEnum)
   type: string;
   @IsNumber()
-  @IsOptional()
   price: number;
 }
