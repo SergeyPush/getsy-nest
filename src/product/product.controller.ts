@@ -6,7 +6,7 @@ import {
   Param,
   Patch,
   Post,
-  RequestMapping,
+  Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -21,7 +21,10 @@ export class ProductController {
   @ApiTags('products')
   @ApiOperation({ summary: 'Get all Products' })
   @ApiResponse({ status: 200, description: 'Ok' })
-  getAllProducts() {
+  getAllProducts(@Query('type') type: 'product' | 'service') {
+    if (type) {
+      return this.productService.getProductByType(type);
+    }
     return this.productService.getAllProducts();
   }
 

@@ -10,6 +10,13 @@ export class ProductDbService {
   async getAllProducts() {
     return this.prismaService.product.findMany();
   }
+  async getProductByType(type: string) {
+    return this.prismaService.product.findMany({
+      where: {
+        type,
+      },
+    });
+  }
 
   async getProductById(id: number) {
     const product = await this.prismaService.product.findUnique({

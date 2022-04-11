@@ -10,6 +10,9 @@ export class ProductService {
   async getAllProducts() {
     return this.prismaProduct.getAllProducts();
   }
+  async getProductByType(type: string) {
+    return this.prismaProduct.getProductByType(type);
+  }
 
   async createProduct(createProductDto: CreateProductDto) {
     return this.prismaProduct.createProduct(createProductDto);
