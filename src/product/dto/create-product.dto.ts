@@ -29,6 +29,7 @@ export class CreateProductDto {
   @IsNumber()
   price: number;
   @IsNumber()
+  @IsOptional()
   quantity: number;
   @IsOptional()
   @IsString({ each: true })
