@@ -28,4 +28,9 @@ export class CreateProductDto {
   type: string;
   @IsNumber()
   price: number;
+  @IsNumber()
+  quantity: number;
+  @IsOptional()
+  @IsString({ each: true })
+  images: string;
 }

@@ -28,9 +28,6 @@ model Product {
   features    String[]
   type        String
   price       Float?
-}
-
-enum Role {
-  PRODUCT
-  SERVICE
+  images      String[]
+  quantity    Int?
 }
