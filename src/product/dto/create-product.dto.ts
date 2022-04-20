@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export enum ProductTypeEnum {
   PRODUCT = 'product',
@@ -26,10 +27,13 @@ export class CreateProductDto {
   @IsNotEmpty()
   @IsEnum(ProductTypeEnum)
   type: string;
+  @IsNotEmpty({ message: 'Price is required' })
   @IsNumber()
+  @Transform(({ value }) => Number(value))
   price: number;
   @IsNumber()
   @IsOptional()
+  @Transform(({ value }) => Number(value))
   quantity: number;
   @IsOptional()
   @IsString({ each: true })

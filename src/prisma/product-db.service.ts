@@ -30,7 +30,8 @@ export class ProductDbService {
     return product;
   }
   async createProduct(productDto: CreateProductDto) {
-    return this.prismaService.product.create({ data: productDto });
+    const { id, ...rest } = productDto;
+    return this.prismaService.product.create({ data: rest });
   }
   async updateProduct(id: number, updateProduct: UpdateProductDto) {
     const product = await this.getProductById(id);
@@ -38,7 +39,7 @@ export class ProductDbService {
       where: {
         id: product.id,
       },
-      data: updateProduct,
+      data: { ...updateProduct },
     });
   }
 

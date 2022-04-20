@@ -4,14 +4,18 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('products')
 export class ProductController {
@@ -32,7 +36,14 @@ export class ProductController {
   @ApiTags('products')
   @ApiOperation({ summary: 'Create product' })
   @ApiResponse({ status: 201, description: 'Created' })
-  createProduct(@Body() createProductDto: CreateProductDto) {
+  @UseInterceptors(FilesInterceptor('images'))
+  createProduct(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFiles() data: Array<Express.Multer.File>,
+  ) {
+    // console.log(createProductDto);
+    // console.log(data);
+
     return this.productService.createProduct(createProductDto);
   }
 
@@ -49,7 +60,7 @@ export class ProductController {
   @ApiOperation({ summary: 'Update product' })
   @ApiResponse({ status: 200, description: 'Ok' })
   updateProductById(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() product: UpdateProductDto,
   ) {
     return this.productService.updateProductById(id, product);
