@@ -39,12 +39,12 @@ export class ProductController {
   @UseInterceptors(FilesInterceptor('images'))
   createProduct(
     @Body() createProductDto: CreateProductDto,
-    @UploadedFiles() data: Array<Express.Multer.File>,
+    @UploadedFiles() images: Array<Express.Multer.File>,
   ) {
-    // console.log(createProductDto);
-    // console.log(data);
-
-    return this.productService.createProduct(createProductDto);
+    if (images) {
+      createProductDto.images = images.map((image) => image.originalname);
+    }
+    return this.productService.createProduct(createProductDto, images);
   }
 
   @Get('/:id')

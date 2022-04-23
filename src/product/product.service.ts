@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { ProductDbService } from '../prisma/product-db.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ImageService } from '../image/image.service';
 
 @Injectable()
 export class ProductService {
-  constructor(private prismaProduct: ProductDbService) {}
+  constructor(
+    private prismaProduct: ProductDbService,
+    private imageService: ImageService,
+  ) {}
 
   async getAllProducts() {
     return this.prismaProduct.getAllProducts();
@@ -14,7 +18,13 @@ export class ProductService {
     return this.prismaProduct.getProductByType(type);
   }
 
-  async createProduct(createProductDto: CreateProductDto) {
+  async createProduct(
+    createProductDto: CreateProductDto,
+    images: Array<Express.Multer.File>,
+  ) {
+    if (images) {
+      await this.imageService.saveImages(images);
+    }
     return this.prismaProduct.createProduct(createProductDto);
   }
 
