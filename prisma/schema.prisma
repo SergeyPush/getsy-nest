@@ -29,5 +29,6 @@ model Product {
   type        String
   price       Float?
   images      String[]
+  imageId     String[]
   quantity    Int?
 }

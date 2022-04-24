@@ -37,5 +37,8 @@ export class CreateProductDto {
   quantity: number;
   @IsOptional()
   @IsString({ each: true })
-  images: string[];
+  images?: string[];
+  @IsOptional()
+  @IsString({ each: true })
+  imageId?: string[];
 }

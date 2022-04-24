@@ -22,8 +22,15 @@ export class ProductService {
     createProductDto: CreateProductDto,
     images: Array<Express.Multer.File>,
   ) {
-    if (images) {
-      await this.imageService.saveImages(images);
+    if (images && process.env.NODE_ENV === 'development') {
+      await this.imageService.saveImagesLocally(images);
+    }
+    if (images && process.env.NODE_ENV !== 'development') {
+      const res = await this.imageService.saveOnServer(images);
+      const urls = res.map((image) => image.filePath);
+      const ids = res.map((image) => image.fileId);
+      createProductDto.images = urls;
+      createProductDto.imageId = ids;
     }
     return this.prismaProduct.createProduct(createProductDto);
   }
