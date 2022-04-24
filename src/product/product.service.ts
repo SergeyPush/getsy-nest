@@ -3,6 +3,7 @@ import { ProductDbService } from '../prisma/product-db.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ImageService } from '../image/image.service';
+import { JwtInterface } from '../auth/types/jwt.interface';
 
 @Injectable()
 export class ProductService {
@@ -23,6 +24,7 @@ export class ProductService {
     images: Array<Express.Multer.File>,
   ) {
     if (images && process.env.NODE_ENV === 'development') {
+      createProductDto.images = images.map((image) => image.originalname);
       await this.imageService.saveImagesLocally(images);
     }
     if (images && process.env.NODE_ENV !== 'development') {

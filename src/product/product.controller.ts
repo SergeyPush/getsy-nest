@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
@@ -16,6 +17,9 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../auth/get-user.decorator';
+import { JwtInterface } from '../auth/types/jwt.interface';
 
 @Controller('products')
 export class ProductController {
@@ -33,6 +37,7 @@ export class ProductController {
   }
 
   @Post()
+  @UseGuards(AuthGuard())
   @ApiTags('products')
   @ApiOperation({ summary: 'Create product' })
   @ApiResponse({ status: 201, description: 'Created' })
@@ -40,10 +45,9 @@ export class ProductController {
   createProduct(
     @Body() createProductDto: CreateProductDto,
     @UploadedFiles() images: Array<Express.Multer.File>,
+    @GetUser() user: JwtInterface,
   ) {
-    if (images) {
-      createProductDto.images = images.map((image) => image.originalname);
-    }
+    createProductDto.authorId = user.id;
     return this.productService.createProduct(createProductDto, images);
   }
 
