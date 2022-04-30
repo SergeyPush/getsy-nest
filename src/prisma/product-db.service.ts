@@ -22,12 +22,44 @@ export class ProductDbService {
     });
   }
 
+  async getProductByAuthor(userId: number) {
+    return this.prismaService.product.findMany({
+      where: {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        authorId: userId,
+      },
+    });
+  }
+
+  async getProductsByIds(ids: number[]) {
+    return this.prismaService.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+  }
+
   async getProductById(id: number) {
     const product = await this.prismaService.product.findUnique({
       where: {
         id,
       },
+      include: {
+        author: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            avatar: true,
+          },
+        },
+      },
     });
+
     if (!product) {
       throw new BadRequestException('Product not found');
     }

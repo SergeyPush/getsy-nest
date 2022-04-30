@@ -41,4 +41,5 @@ export class CreateProductDto {
   @IsOptional()
   @IsString({ each: true })
   imageId?: string[];
+  authorId?: number;
 }

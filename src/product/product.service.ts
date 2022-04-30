@@ -23,6 +23,7 @@ export class ProductService {
     images: Array<Express.Multer.File>,
   ) {
     if (images && process.env.NODE_ENV === 'development') {
+      createProductDto.images = images.map((image) => image.originalname);
       await this.imageService.saveImagesLocally(images);
     }
     if (images && process.env.NODE_ENV !== 'development') {
@@ -38,6 +39,15 @@ export class ProductService {
   async getProductById(id: number) {
     return this.prismaProduct.getProductById(id);
   }
+
+  async getProductByAuthor(userId: number) {
+    return this.prismaProduct.getProductByAuthor(userId);
+  }
+
+  async getProductsByIds(ids: number[]) {
+    return this.prismaProduct.getProductsByIds(ids);
+  }
+
   async deleteProductById(id: number) {
     return this.prismaProduct.deleteProduct(id);
   }

@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -9,6 +10,7 @@ import {
   Post,
   Query,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
@@ -16,6 +18,10 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../auth/get-user.decorator';
+import { JwtInterface } from '../auth/types/jwt.interface';
+import { ProductQueryDto } from './dto/product-query.dto';
 
 @Controller('products')
 export class ProductController {
@@ -25,14 +31,19 @@ export class ProductController {
   @ApiTags('products')
   @ApiOperation({ summary: 'Get all Products' })
   @ApiResponse({ status: 200, description: 'Ok' })
-  getAllProducts(@Query('type') type: 'product' | 'service') {
+  getAllProducts(@Query() query: ProductQueryDto) {
+    const { type, ids } = query;
     if (type) {
       return this.productService.getProductByType(type);
+    }
+    if (ids) {
+      return this.productService.getProductsByIds(ids);
     }
     return this.productService.getAllProducts();
   }
 
   @Post()
+  @UseGuards(AuthGuard())
   @ApiTags('products')
   @ApiOperation({ summary: 'Create product' })
   @ApiResponse({ status: 201, description: 'Created' })
@@ -40,11 +51,21 @@ export class ProductController {
   createProduct(
     @Body() createProductDto: CreateProductDto,
     @UploadedFiles() images: Array<Express.Multer.File>,
+    @GetUser() user: JwtInterface,
   ) {
-    if (images) {
-      createProductDto.images = images.map((image) => image.originalname);
-    }
+    createProductDto.authorId = user.id;
     return this.productService.createProduct(createProductDto, images);
+  }
+
+  @Get('/user/:id')
+  @ApiTags('products')
+  @ApiOperation({ summary: 'Get all products of the user' })
+  @ApiResponse({ status: 200, description: 'Ok' })
+  getProductByAuthor(@Param('id', ParseIntPipe) id: number) {
+    if (!id) {
+      throw new BadRequestException('No such user');
+    }
+    return this.productService.getProductByAuthor(id);
   }
 
   @Get('/:id')

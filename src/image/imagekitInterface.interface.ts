@@ -1,4 +1,4 @@
-interface ImagekitInterface {
+export interface ImagekitInterface {
   fileId: string;
   name: string;
   size: number;
