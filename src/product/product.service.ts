@@ -3,7 +3,6 @@ import { ProductDbService } from '../prisma/product-db.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ImageService } from '../image/image.service';
-import { JwtInterface } from '../auth/types/jwt.interface';
 
 @Injectable()
 export class ProductService {
