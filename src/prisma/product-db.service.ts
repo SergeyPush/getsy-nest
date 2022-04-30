@@ -2,7 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { CreateProductDto } from '../product/dto/create-product.dto';
 import { UpdateProductDto } from '../product/dto/update-product.dto';
-import { JwtInterface } from '../auth/types/jwt.interface';
 
 @Injectable()
 export class ProductDbService {
@@ -23,11 +22,22 @@ export class ProductDbService {
     });
   }
 
-  async getProductByAuthor(author: JwtInterface) {
-    const { id } = author;
+  async getProductByAuthor(userId: number) {
     return this.prismaService.product.findMany({
       where: {
-        authorId: id,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        authorId: userId,
+      },
+    });
+  }
+
+  async getProductsByIds(ids: number[]) {
+    return this.prismaService.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
       },
     });
   }

@@ -28,6 +28,7 @@ export class AuthService {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        id: user.id,
         ...this.createToken(user),
       };
     }
