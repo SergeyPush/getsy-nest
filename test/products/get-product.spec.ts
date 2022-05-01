@@ -1,14 +1,27 @@
 import * as supertest from 'supertest';
 import { getTestProduct } from '../utils/product.utils';
 import { expect } from 'chai';
+import { getRandomUser } from '../utils/users.utils';
 
 const request = supertest('http://localhost:4000/api');
 
 describe('Get products', () => {
   let product;
+  let user;
   const payload = getTestProduct();
   before(async () => {
-    const response = await request.post('/products').send(payload).expect(201);
+    const payloadUser = getRandomUser();
+    const res = await request
+      .post('/auth/signup')
+      .send(payloadUser)
+      .expect(201);
+    user = res.body;
+
+    const response = await request
+      .post('/products')
+      .set('Authorization', `Bearer ${user.accessToken}`)
+      .send(payload)
+      .expect(201);
     product = response.body;
   });
 
@@ -38,5 +51,6 @@ describe('Get products', () => {
 
   after(async () => {
     await request.delete(`/products/${product.id}`).expect(200);
+    await request.delete(`/users/${user.id}`).expect(200);
   });
 });

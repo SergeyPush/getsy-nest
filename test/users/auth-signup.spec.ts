@@ -1,10 +1,10 @@
 import * as supertest from 'supertest';
 import { expect } from 'chai';
-import { getRandomUser } from '../utils/users.utils';
+import { getInvalidUser, getRandomUser } from '../utils/users.utils';
 
 const request = supertest('http://localhost:4000/api');
 
-describe('Sign Up user', () => {
+describe('Sign Up user successfully', () => {
   const payload = getRandomUser();
   it('should POST /auth/signup', async () => {
     const res = await request.post('/auth/signup').send(payload).expect(201);
@@ -16,44 +16,7 @@ describe('Sign Up user', () => {
 });
 
 describe('Throw an error', () => {
-  const data = [
-    {
-      payload: {
-        firstName: '',
-        lastName: 'Folks',
-        email: 'gingerfolks@mail.com',
-        password: '123456',
-      },
-      expected: ['firstName must be a string'],
-    },
-    {
-      payload: {
-        firstName: 'Ginger',
-        lastName: '',
-        email: 'gingerfolks@mail.com',
-        password: '123456',
-      },
-      expected: ['lastName must be a string'],
-    },
-    {
-      payload: {
-        firstName: 'Ginger',
-        lastName: 'Folks',
-        email: '',
-        password: '123456',
-      },
-      expected: ['email must be an email'],
-    },
-    {
-      payload: {
-        firstName: 'Ginger',
-        lastName: 'Folks',
-        email: 'gingerfolks@mail.com',
-        password: '',
-      },
-      expected: ['password should not be empty'],
-    },
-  ];
+  const data = getInvalidUser();
 
   data.forEach(({ payload, expected }) => {
     it('should return error', async () => {
