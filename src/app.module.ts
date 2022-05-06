@@ -7,6 +7,7 @@ import { ProductModule } from './product/product.module';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ImageModule } from './image/image.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ImageModule } from './image/image.module';
     AuthModule,
     PrismaModule,
     ImageModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
