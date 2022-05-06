@@ -1,10 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class UserDbService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private mailService: MailService,
+  ) {}
 
   async getAllUsers() {
     return this.prismaService.user.findMany({
@@ -23,6 +27,7 @@ export class UserDbService {
     if (user) {
       throw new BadRequestException('User is already exists');
     }
+    await this.mailService.sendSignUpConfirmation(createUserDto);
     return this.prismaService.user.create({
       data: createUserDto,
     });
