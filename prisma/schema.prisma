@@ -19,6 +19,7 @@ model User {
   avatar    String?
   username  String?
   products  Product[]
+  Basket    Basket[]
 }
 
 model Product {
@@ -32,6 +33,16 @@ model Product {
   images      String[]
   imageId     String[]
   quantity    Int?
-  author      User?     @relation(fields:[authorId], references: [id])
+  author      User?    @relation(fields: [authorId], references: [id])
   authorId    Int?
+  Basket      Basket[]
+}
+
+model Basket {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
 }

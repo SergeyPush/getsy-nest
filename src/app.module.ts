@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ImageModule } from './image/image.module';
 import { MailModule } from './mail/mail.module';
+import { BasketModule } from './basket/basket.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { MailModule } from './mail/mail.module';
     PrismaModule,
     ImageModule,
     MailModule,
+    BasketModule,
   ],
   controllers: [AppController],
   providers: [AppService],
